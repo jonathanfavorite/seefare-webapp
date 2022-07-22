@@ -1,0 +1,18 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 25px;
+  overflow: hidden;
+  background-color: #efefef;
+}
+html {
+}
+#master-container {
+  display: flex;
+  flex-grow: 1;
+  margin: 0 auto;
+  max-width: 500px;
+  background:#fff;
+  min-height: 100vh;
+}
