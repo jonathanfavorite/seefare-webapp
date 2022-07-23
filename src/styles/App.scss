@@ -6,8 +6,12 @@ body {
   width:100vw;
   height:100vh;
   background-color: #efefef;
+  min-height: fill-available;
+  min-height: -webkit-fill-available;
 }
 html {
+  height: fill-available;
+  height: -webkit-fill-available;
 }
 #master-container {
   display: flex;
