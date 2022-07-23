@@ -4,7 +4,7 @@ body {
   font-size: 18px;
   line-height: 25px;
   width:100vw;
-  height:100vh;
+  height: calc(100vh - calc(100vh - 100%));
   background-color: #efefef;
   min-height: stretch;
 }
@@ -17,5 +17,5 @@ html {
   margin: 0 auto;
   max-width: 500px;
   background:#fff;
-  min-height: 100vh;
+  height: calc(100vh - calc(100vh - 100%));
 }
