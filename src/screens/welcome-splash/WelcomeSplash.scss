@@ -81,6 +81,9 @@ $bgURL: '../../../public/images/welcome-splash.jpg';
                 justify-content: center;
                 font-weight: bold;
                 font-size:30px;
+                box-shadow: 0 0 0 0 master.$primary-green;
+	            transform: scale(1);
+	            animation: pulse 2s infinite;
             }
         }
         #undergo_wrap {}
@@ -103,4 +106,19 @@ $bgURL: '../../../public/images/welcome-splash.jpg';
     #logo-fare {
         font-weight: 300;
     }
+}
+
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(62, 199, 11, 0.7);
+	}
+
+	70% {
+		box-shadow: 0 0 0 50px rgba(62, 199, 11, 0);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(62, 199, 11, 0);
+	}
 }
