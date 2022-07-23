@@ -7,11 +7,11 @@ body {
   height:100vh;
   background-color: #efefef;
   min-height: fill-available;
-  min-height: -webkit-fill-available;
+  min-height: stretch;
 }
 html {
   height: fill-available;
-  height: -webkit-fill-available;
+  height: stretch;
 }
 #master-container {
   display: flex;
