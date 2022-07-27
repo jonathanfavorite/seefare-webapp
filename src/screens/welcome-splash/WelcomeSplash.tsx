@@ -1,4 +1,6 @@
 import React from 'react'
+import GoButton from '../../components/go-button/GoButton'
+import Logo from '../../components/logo/Logo'
 import './WelcomeSplash.scss'
 
 export default function WelcomeSplash () {
@@ -9,10 +11,7 @@ export default function WelcomeSplash () {
           <div id='top-content'></div>
 
           <div id='logo_wrap'>
-            <div id='global-logo'>
-              <div id='logo-see'>SEE</div>
-              <div id='logo-fare'>FARE</div>
-            </div>
+            <Logo />
           </div>
 
           <div id='destination-wrap'>
@@ -35,9 +34,7 @@ export default function WelcomeSplash () {
           </div>
 
           <div id='go_wrap'>
-            <div id='button'>
-                GO
-            </div>
+            <GoButton link='dashboard/' />
           </div>
 
           <div id='undergo_wrap'></div>
