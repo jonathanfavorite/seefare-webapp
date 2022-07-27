@@ -25,6 +25,7 @@ export default function GoogleMap(mapProps: GoogleMapProps) {
     mapTypeControl: false,
     streetViewControl: false,
     zoomControl: false,
+    gestureHandling: 'greedy'
   }
   
     return <>
