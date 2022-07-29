@@ -1,9 +1,5 @@
 .google-map-container {
-  width: 500px;
-  height: 500px;
-  position: absolute;
-  left:0;
-  top:0;
+
   width: 100vw;
   height: 100vh;
   a[href^="http://maps.google.com/maps"] {
@@ -11,6 +7,9 @@
   }
   a[href^="https://maps.google.com/maps"] {
     display: none !important;
+  }
+  div {
+    position: relative !important;
   }
 
   .gmnoprint a,

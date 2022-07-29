@@ -20,3 +20,19 @@ export default function GoButton ({
   </div>
   </>
 }
+
+interface GoButtonClickProps {
+    onClick?: () => void,
+}
+function GoButtonWithClickEvent(props: GoButtonClickProps){
+  return <>
+<div className='go_button_wrapper' onClick={props.onClick}>
+    <div 
+      className='go_button'>
+        GO
+    </div>
+  </div>
+  </>
+}
+
+export {GoButton, GoButtonWithClickEvent}
