@@ -7,6 +7,8 @@ interface MapContextProps {
   updateSearchFrom: (searchFrom: string) => void;
   updateSearchTo: (searchTo: string) => void;
   updateMap: (map: any) => void;
+  updateSearchButtonClicked: () => void;
+  searchButtonClicked: number;
 }
 
 const MapContext = createContext<MapContextProps>(null as any);
@@ -15,6 +17,7 @@ function MapContextProvider(props: any) {
   const [map, setMap] = useState(null);
   const [searchFrom, setSearchFrom] = useState<string>("");
   const [searchTo, setSearchTo] = useState<string>("");
+  const [searchButtonClicked, setSearchButtonClicked] = useState<number>(0);
 
   const updateMap = (map: any) => {
     setMap(map);
@@ -25,6 +28,9 @@ function MapContextProvider(props: any) {
   const updateSearchTo = (searchTo: string) => {
     setSearchTo(old => searchTo);
   };
+  const updateSearchButtonClicked = () => {
+    setSearchButtonClicked(old => old + 1);
+  }
 
   let contextList: MapContextProps = {
     map,
@@ -32,7 +38,9 @@ function MapContextProvider(props: any) {
     searchTo,
     updateMap,
     updateSearchFrom,
-    updateSearchTo
+    updateSearchTo,
+    updateSearchButtonClicked,
+    searchButtonClicked
   };
 
   return (

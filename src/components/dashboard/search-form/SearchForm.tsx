@@ -31,7 +31,7 @@ function SearchForm() {
   const handleGoButtonClickEvent = () => {
     if(mapCtx.searchTo == "") {
       if(toRef.current) {
-        mapCtx.updateSearchTo("toRef.current.value");
+        mapCtx.updateSearchTo(toRef.current.value);
       }
     }
     if(mapCtx.searchFrom == ""){
@@ -39,7 +39,7 @@ function SearchForm() {
     }
     else
     {
-      console.log("going from", mapCtx.searchFrom, "to", mapCtx.searchTo);
+      mapCtx.updateSearchButtonClicked();
     }
   };
 

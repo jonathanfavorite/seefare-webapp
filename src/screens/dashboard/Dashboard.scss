@@ -6,26 +6,6 @@
     flex-direction: column;
     flex-grow: 1;
 
-    .tags-wrap {
-      .tags-list {
-        background: #005eda;
-        overflow-x: auto;
-        white-space: nowrap;
-        &::-webkit-scrollbar {
-          display: none;
-        }
-        width: 100vw;
-        .tag {
-          display: inline-block;
-          padding: 5px 10px;
-          vertical-align: middle;
-          background: #007dff;
-          margin: 15px 5px;
-          border-radius: 10px;
-          color: #fff;
-        }
-      }
-    }
     .maps-wrap {
       flex: 1;
       position: relative;
@@ -45,7 +25,6 @@
         }
       }
       .draggable-slider-wrap {
-        
         background-color: #007bfb;
         position: absolute;
         bottom:0;

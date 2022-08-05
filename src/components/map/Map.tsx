@@ -1,9 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Map.scss";
 import {DarkThemeMap} from "../../helpers/MapStyles";
-function Map() {
+import { MapContext } from "../../contexts/MapContext";
+import { AppContext } from "../../contexts/AppContext";
+
+interface MapProps {
+  goButtonPress?: () => void;
+}
+
+function Map(props: MapProps) {
+
+  const mapContext = useContext(MapContext);
+  const appContext = useContext(AppContext);
   const mapRef = useRef(null);
-  const [map, setMap] = useState<any>(null);
 
   let foundPath = [
     {
@@ -215,6 +224,13 @@ function Map() {
     },
   ];
 
+  useEffect(() => {
+    if(mapContext.searchButtonClicked != 0)
+    {
+      ShowPath();
+    }
+  }, [mapContext.searchButtonClicked]);
+
 
   useEffect(() => {
     if (mapRef.current) {
@@ -228,7 +244,7 @@ function Map() {
 
       newMap.setOptions(defaultMapOptions);
       newMap.setOptions({ styles: noPoi });
-      setMap(newMap);
+      mapContext.updateMap(newMap);
     }
   }, []);
 
@@ -250,10 +266,10 @@ function Map() {
 
       let newMarker = new google.maps.Marker({
         position: { lat: 26.605254772052433, lng: -81.91791049095617 },
-        map: map,
+        map: mapContext.map
       });
 
-      line.setMap(map);
+      line.setMap(mapContext.map);
 
       for (let i = 1; i < foundPath.length; i++) {
         let line = new google.maps.Polyline({
@@ -269,11 +285,11 @@ function Map() {
         if (i == foundPath.length - 1) {
           let newMarker = new google.maps.Marker({
             position: { lat: foundPath[i].lat, lng: foundPath[i].lng },
-            map: map,
+            map: mapContext.map,
           });
         }
 
-        line.setMap(map);
+        line.setMap(mapContext.map);
       }
 
       fitBoundsToMarkers();
@@ -285,8 +301,8 @@ function Map() {
     for (let i = 0; i < foundPath.length; i++) {
       bounds.extend({ lat: foundPath[i].lat, lng: foundPath[i].lng });
     }
-    map.fitBounds(bounds);
-    map.setZoom(map.getZoom() - 1);
+    mapContext.map.fitBounds(bounds);
+    mapContext.map.setZoom(mapContext.map.getZoom() - 1);
   }
 
   return <div className="map-container" ref={mapRef}></div>;
