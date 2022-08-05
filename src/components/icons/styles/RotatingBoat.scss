@@ -1,0 +1,15 @@
+.rock-the-boat {
+    fill: white;
+    svg {
+        animation: rock-the-boat 2s infinite;
+    }
+    // animation
+    @keyframes rock-the-boat {
+        0% {
+            transform: rotate(0deg);
+        }
+        50% {
+            transform: rotate(-15deg);
+        }
+    }
+}

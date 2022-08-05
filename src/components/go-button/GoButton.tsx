@@ -6,14 +6,14 @@ interface GoButtonProps {
     link: string
 }
 
-export default function GoButton ({
-  link = "#"
+export default function GoButton (props: GoButtonProps, {
+  link = '#'
 }) {
   return <>
   <div className='go_button_wrapper'>
-  <Link to={link}>
+  <Link to={props.link}>
     <div 
-      className='go_button'>
+      className='go_button' onClick={props.onClick}>
         GO
     </div>
   </Link>

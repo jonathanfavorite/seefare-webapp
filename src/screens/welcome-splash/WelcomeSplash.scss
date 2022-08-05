@@ -71,7 +71,17 @@ $bgURL: '../../../public/images/welcome-splash.jpg';
             display: flex;
             align-items: center;
             justify-content: center;
-                    
+            .waiting-go {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                .text {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-top: 20px;
+                }
+            }
         }
         #undergo_wrap {}
         #bottom-content {
