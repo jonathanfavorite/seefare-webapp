@@ -9,6 +9,7 @@ import {
   LoadingContextProvider,
 } from "./contexts/LoadingContext";
 import { MapContextProvider } from "./contexts/MapContext";
+import Test from "./screens/test/Test";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             </MapContextProvider>
           }
         />
+        <Route path="/test" element={<Test />} />
       </Routes>
     </div>
   );

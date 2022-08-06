@@ -22,40 +22,52 @@ import Header from "../../components/header/Header";
 import SearchForm from "../../components/dashboard/search-form/SearchForm";
 import DestinationService from "../../services/api/destination.service";
 import TagList from "../../components/dashboard/tag-list/TagList";
+import useVerticalSwipe from "../../hooks/useVerticalSwipe";
 
 export default function DashBoardScreen() {
   const destinationManager = new DestinationService();
   const loadingCtx = useContext(LoadingContext);
   const appCtx = useContext(AppContext);
 
+  const [originalDraggableHeight, setOriginalDraggableHeight] = useState(0);
+  const mapContentRef = useRef<HTMLDivElement>(null);
   const hiddenSliderRef = createRef<HTMLDivElement>();
   const draggableSliderRef = createRef<HTMLDivElement>();
+  const draggableSliderGripRef = createRef<HTMLDivElement>();
 
-  const [hiddenSliderHeight, setHiddenSliderHeight] = useState(0);
-  const [draggableSliderHeight, setDraggableSliderHeight] = useState(0);
+  const swipeHook = useVerticalSwipe(draggableSliderGripRef);
 
   const [mouseDown, setMouseDown] = useState(false);
 
-  function handleDraggableMouseDownEvent(e: React.MouseEvent) {
-    if (draggableSliderRef.current) {
-      setMouseDown(true);
-      console.log("mousedown")
+  useEffect(() => {
+    if (swipeHook.swipedUp) {
+      swipedUp();
+    }
+    if (swipeHook.swipedDown) {
+      swipedDown();
+    }
+  }, [swipeHook.swipedUp]);
+
+  function swipedUp() {
+    if (draggableSliderRef.current && mapContentRef.current) {
+      const mapsize = mapContentRef.current.offsetHeight * 1;
+      draggableSliderRef.current.style.height = 90 + "%";
     }
   }
-  function handleDraggableMouseUpEvent(e: React.MouseEvent) {
+  function swipedDown() {
     if (draggableSliderRef.current) {
-     
-      setMouseDown(false);
-      console.log("mouseupn")
+      draggableSliderRef.current.style.height = originalDraggableHeight + "px";
     }
   }
 
   useEffect(() => {
-    if(hiddenSliderRef.current && draggableSliderRef.current) {
-      console.log("hey");
-      hiddenSliderRef.current.style.height = draggableSliderRef.current.offsetHeight - 30 + "px";
+    if (hiddenSliderRef.current && draggableSliderRef.current) {
+      setOriginalDraggableHeight(draggableSliderRef.current.offsetHeight);
+      hiddenSliderRef.current.style.height =
+        draggableSliderRef.current.offsetHeight - 30 + "px";
+      draggableSliderRef.current.style.height = draggableSliderRef.current.offsetHeight + "px";
     }
-  }, [draggableSliderRef.current?.offsetHeight]);
+  }, []);
 
   useEffect(() => {
     appCtx.UpdateCurrentScreen("explore");
@@ -85,20 +97,23 @@ export default function DashBoardScreen() {
         <TagList />
 
         <div className="maps-wrap">
-          <div className="maps-content">
+          <div className="maps-content" ref={mapContentRef}>
             <Map />
           </div>
 
           <div className="hidden-slider-wrap" ref={hiddenSliderRef}></div>
-          <div
-            className="draggable-slider-wrap"
-            onMouseDown={handleDraggableMouseDownEvent}
-            onMouseUp={handleDraggableMouseUpEvent}
-            ref={draggableSliderRef}
-          >
+          <div className="draggable-slider-wrap" ref={draggableSliderRef}>
             <div className="content">
-              <div className="slider-grip"></div>
+              <div className="slider-grip-wrap" ref={draggableSliderGripRef}
+              onTouchStart={swipeHook.onTouchStart}
+              onTouchMove={swipeHook.onTouchMove}
+              onTouchEnd={swipeHook.onTouchEnd}>
+                <div
+                  className="slider-grip"
+                ></div>
+             
               {!loadingCtx.loading && <SearchForm />}
+              </div>
             </div>
           </div>
         </div>

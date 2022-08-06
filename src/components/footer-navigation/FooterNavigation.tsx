@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react'
 import { AppContext } from '../../contexts/AppContext';
-import { GasIcon, PinIcon, SettingsIcon, WeatherIcon } from '../icons/NavigationIcons';
+import { GasIcon, InfoIcon, PinIcon, SettingsIcon, WeatherIcon } from '../icons/NavigationIcons';
 import "./FooterNavigation.scss";
 
 interface FooterItem {
@@ -16,13 +16,7 @@ function FooterNavigation() {
     const appCtx = useContext(AppContext);
 
     const footerItems: FooterItem[] = [
-        {
-          id: 'explore',
-          name: "Explore",
-          link: "/dashboard",
-          icon: <PinIcon />,
-          class: "explore-icon",
-        },
+       
         {
           id: 'weather',
           name: "Weather",
@@ -36,6 +30,20 @@ function FooterNavigation() {
           link: "/dashboard",
           icon: <GasIcon />,
           class: "gas-icon",
+        },
+        {
+          id: 'explore',
+          name: "Explore",
+          link: "/dashboard",
+          icon: <PinIcon />,
+          class: "explore-icon",
+        },
+        {
+          id: 'info',
+          name: "Info",
+          link: "/dashboard",
+          icon: <InfoIcon />,
+          class: "info-icon",
         },
         {
           id: 'settings',

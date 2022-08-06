@@ -9,9 +9,11 @@ import "./SearchForm.scss";
 function SearchForm() {
   const mapCtx = useContext(MapContext);
   const appCtx = useContext(AppContext);
-
+  
   const fromRef = createRef<HTMLInputElement>();
   const toRef = createRef<HTMLSelectElement>();
+
+  const [showToValidation, setShowToValidation] = useState(false);
 
   useEffect(() => {
     //miniDest.length > 0 && mapCtx.updateSearchTo(miniDest[0].name);
@@ -19,6 +21,7 @@ function SearchForm() {
 
   const handleSearchFromChange = () => {
     if (fromRef.current) {
+      setShowToValidation(false);
       mapCtx.updateSearchFrom(fromRef.current.value);
     }
   };
@@ -36,6 +39,7 @@ function SearchForm() {
     }
     if(mapCtx.searchFrom == ""){
       console.log("Please select a starting point");
+      setShowToValidation(true);
     }
     else
     {
@@ -53,6 +57,12 @@ function SearchForm() {
             </div>
             <div className="search-cell">
               <div className="input">
+                {showToValidation && <>
+                <div className='input-validation-error'>
+                  <div className="arrow"></div>
+                  <div className="text">Please enter an address</div>
+                </div>
+                </>}
                 <input
                   type="text"
                   placeholder="Enter a location"
