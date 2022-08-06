@@ -1,212 +1,90 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Map.scss";
-import {DarkThemeMap} from "../../helpers/MapStyles";
+import { DarkThemeMap } from "../../helpers/Map/MapStyles";
 import { MapContext } from "../../contexts/MapContext";
 import { AppContext } from "../../contexts/AppContext";
+import { DestinationModel } from "../../models/DestinationModel";
+import LatLngModel from "../../models/LatLngModel";
+import { MarkerModel, MarkerType } from "../../models/MarkerModel";
 
 interface MapProps {
   goButtonPress?: () => void;
 }
 
 function Map(props: MapProps) {
-
   const mapContext = useContext(MapContext);
   const appContext = useContext(AppContext);
   const mapRef = useRef(null);
 
-  let foundPath = [
-    {
-        "id": 1,
-        "lat": 26.605045551439343,
-        "lng": -81.91779183869251,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 3308556164627,
-                "fromSelf": false,
-                "distance": 0.03921545947204248
-            },
-            {
-                "id": 1653324513701,
-                "fromSelf": false,
-                "distance": 0.03314775086629634
-            }
-        ],
-        "active": false,
-        "speed": 0,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 1653324513701,
-        "lat": 26.60484843199908,
-        "lng": -81.91828101580795,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 8266622579986,
-                "fromSelf": false,
-                "distance": 0.09
-            },
-            {
-                "id": 8266622607651,
-                "fromSelf": false,
-                "distance": 0.06
-            },
-            {
-                "id": 1653324501949,
-                "fromSelf": true,
-                "distance": 0.07
-            },
-            {
-                "id": 3308556164627,
-                "fromSelf": false,
-                "distance": 0.07
-            },
-            {
-                "id": 3308556164627,
-                "fromSelf": true,
-                "distance": 0.07
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 1653324501949,
-        "lat": 26.60445754113631,
-        "lng": -81.91941334535056,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 8266622517541,
-                "fromSelf": false,
-                "distance": 0.04
-            },
-            {
-                "id": 8266622497621,
-                "fromSelf": true,
-                "distance": 0.04
-            },
-            {
-                "id": 1653324513701,
-                "fromSelf": false,
-                "distance": 0.07
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 8266622497621,
-        "lat": 26.60396193295359,
-        "lng": -81.91923480239224,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 1653324501949,
-                "fromSelf": false,
-                "distance": 0.04
-            },
-            {
-                "id": 8266622771886,
-                "fromSelf": false,
-                "distance": 0.14
-            },
-            {
-                "id": 1657386398579,
-                "fromSelf": true,
-                "distance": 0.13
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 1657386398579,
-        "lat": 26.60228701222484,
-        "lng": -81.91840104888448,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 8266622497621,
-                "fromSelf": false,
-                "distance": 0.13
-            },
-            {
-                "id": 1658284095850,
-                "fromSelf": false,
-                "distance": 0.07
-            },
-            {
-                "id": 8291421445256,
-                "fromSelf": true,
-                "distance": 0.12
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 8291421445256,
-        "lat": 26.60070359371415,
-        "lng": -81.91900630318179,
-        "type": 0,
-        "connectedNodes": [
-            {
-                "id": 1658284288490,
-                "fromSelf": true,
-                "distance": 0.12
-            },
-            {
-                "id": 1657386398579,
-                "fromSelf": false,
-                "distance": 0.12
-            },
-            {
-                "id": 1658284095850,
-                "fromSelf": true,
-                "distance": 0.12
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": false,
-        "destinationID": 0
-    },
-    {
-        "id": 1658284288490,
-        "lat": 26.59976345867953,
-        "lng": -81.92068000160708,
-        "type": 2,
-        "connectedNodes": [
-            {
-                "id": 8291421445256,
-                "fromSelf": false,
-                "distance": 0.12
-            }
-        ],
-        "active": false,
-        "speed": 5,
-        "isBridge": false,
-        "destination": true,
-        "destinationID": 1658283563690
+  const [markers, setMarkers] = useState<MarkerModel[]>([]);
+
+  function clearMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].marker.setMap(null);
     }
-  ]
+    setMarkers((old) => []);
+  }
+  function addMarker(marker: any) {
+    setMarkers((old) => [...old, marker]);
+  }
+
+  function ShowCurrentTags(destinations: DestinationModel[]) {
+    let x = 0;
+    console.log("SHOWCURRENTTAGS", destinations);
+    for (let i = 0; i < destinations.length; i++) {
+      if (destinations[i].details) {
+        let lat = destinations[i].details!.lat;
+        let lng = destinations[i].details!.lng;
+        if (lat != 0 && lng != 0) {
+          let newMarkerObject = new google.maps.Marker({
+            position: { lat: lat, lng: lng },
+            map: mapContext.map,
+          });
+          let newMarker: MarkerModel = {
+            lat: lat,
+            lng: lng,
+            marker: newMarkerObject,
+            type: MarkerType.Destination,
+            id: destinations[i].id,
+          };
+          addMarker(newMarker);
+        }
+      }
+    }
+    //console.log("showing " + x + " tags");
+  }
+
+  useEffect(() => {
+    clearMarkers();
+    if (mapContext.selectedTagID > 0) {
+      let getSelectedTagDestinations = GetDestinationsByTagID(
+        mapContext.selectedTagID
+      );
+      console.log(getSelectedTagDestinations.length + " found for tag");
+      if (getSelectedTagDestinations.length > 0) {
+        ShowCurrentTags(getSelectedTagDestinations);
+        FitBoundsToSelectedTags(getSelectedTagDestinations);
+      }
+    }
+  }, [mapContext.selectedTagID]);
+
+  function GetDestinationsByTagID(tagID: number): DestinationModel[] {
+    let destinations: DestinationModel[] = [];
+    for (let i = 0; i < appContext.destinations.length; i++) {
+      let destination = appContext.destinations[i];
+      if (destination.details?.lat == 0 || destination.details?.lng == 0) {
+        continue;
+      }
+      if (destination.details?.tags) {
+        for (let j = 0; j < destination.details?.tags.length; j++) {
+          if (destination.details?.tags[j].id == tagID) {
+            destinations.push(destination);
+          }
+        }
+      }
+    }
+    return destinations;
+  }
 
   const defaultMapOptions = {
     fullscreenControl: false,
@@ -225,9 +103,8 @@ function Map(props: MapProps) {
   ];
 
   useEffect(() => {
-    if(mapContext.searchButtonClicked != 0)
-    {
-      ShowPath();
+    if (mapContext.searchButtonClicked != 0) {
+      //ShowPath();
     }
   }, [mapContext.searchButtonClicked]);
 
@@ -248,62 +125,35 @@ function Map(props: MapProps) {
     }
   }, []);
 
-  function ShowPath() {
-    const strokeColor = "black";
-    //foundPath
-    if (mapRef.current) {
-      console.log("ready");
-      //26.605254772052433 -81.91791049095617
-      let line = new google.maps.Polyline({
-        path: [
-          { lat: 26.605254772052433, lng: -81.91791049095617 },
-          { lat: foundPath[0].lat, lng: foundPath[0].lng },
-        ],
-        strokeColor: strokeColor,
-        strokeOpacity: 1.0,
-        strokeWeight: 5,
-      });
+  function showTagName() {}
 
-      let newMarker = new google.maps.Marker({
-        position: { lat: 26.605254772052433, lng: -81.91791049095617 },
-        map: mapContext.map
-      });
-
-      line.setMap(mapContext.map);
-
-      for (let i = 1; i < foundPath.length; i++) {
-        let line = new google.maps.Polyline({
-          path: [
-            { lat: foundPath[i - 1].lat, lng: foundPath[i - 1].lng },
-            { lat: foundPath[i].lat, lng: foundPath[i].lng },
-          ],
-          strokeColor: strokeColor,
-          strokeOpacity: 1.0,
-          strokeWeight: 5,
-        });
-
-        if (i == foundPath.length - 1) {
-          let newMarker = new google.maps.Marker({
-            position: { lat: foundPath[i].lat, lng: foundPath[i].lng },
-            map: mapContext.map,
-          });
-        }
-
-        line.setMap(mapContext.map);
-      }
-
-      fitBoundsToMarkers();
-    }
-  }
-
-  function fitBoundsToMarkers() {
+  function FitBoundsToSelectedTags(positions: DestinationModel[]) {
+    console.log("markers", markers);
     let bounds = new google.maps.LatLngBounds();
-    for (let i = 0; i < foundPath.length; i++) {
-      bounds.extend({ lat: foundPath[i].lat, lng: foundPath[i].lng });
+    for (let i = 0; i < positions.length; i++) {
+      console.log("lat", positions[i].details?.lat);
+      console.log("lng", positions[i].details?.lng);
+      bounds.extend({
+        lat: positions[i].details!.lat,
+        lng: positions[i].details!.lng,
+      });
     }
     mapContext.map.fitBounds(bounds);
-    mapContext.map.setZoom(mapContext.map.getZoom() - 1);
+    //mapContext.map.setZoom(17);
+    if (mapContext.map.getZoom() > 17) {
+      mapContext.map.setZoom(17);
+    }
   }
+  function fitBoundsOnMap(positions: LatLngModel[]) {
+    let bounds = new google.maps.LatLngBounds();
+    for (let i = 0; i < positions.length; i++) {
+      let latlng = new google.maps.LatLng(positions[i].lat, positions[i].lng);
+      mapContext.map.fitBounds(bounds);
+    }
+    mapContext.map.fitBounds(bounds);
+    //mapContext.map.setZoom(mapContext.map.getZoom() - 1);
+  }
+
 
   return <div className="map-container" ref={mapRef}></div>;
 }

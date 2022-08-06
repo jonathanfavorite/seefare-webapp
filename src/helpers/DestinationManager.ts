@@ -1,6 +1,6 @@
 import { DestinationDetail, DestinationModel, DestinationTag } from "../models/DestinationModel";
 
-class DestinationManager {
+class DestinationTransformer {
     transformDestinationsFromAPI(destinations: any): DestinationModel[] {
         let transformedDestinations: DestinationModel[] = [];
         for (let i = 0; i < destinations.length; i++) {
@@ -54,4 +54,4 @@ class DestinationManager {
 
 }
 
-export {DestinationManager}
+export {DestinationTransformer}

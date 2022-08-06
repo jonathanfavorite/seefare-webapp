@@ -5,6 +5,7 @@ import FullScreenLoading from "../../components/loading/full-screen-loading/Full
 import Logo from "../../components/logo/Logo";
 import { AppContext } from "../../contexts/AppContext";
 import { LoadingContext } from "../../contexts/LoadingContext";
+import { DestinationTransformer } from "../../helpers/DestinationManager";
 import {
   DestinationModel,
   DestinationTag,
@@ -16,6 +17,7 @@ export default function WelcomeSplash() {
   const appContext = useContext(AppContext);
   const loadingCtx = useContext(LoadingContext);
   const destinationManager = new DestinationService();
+  const destinationTransformer = new DestinationTransformer();
 
   async function FetchAll() {
     if(appContext.destinations.length === 0 && appContext.tags.length === 0) {
@@ -32,13 +34,15 @@ export default function WelcomeSplash() {
       .GetAllDestinations()
       .then((d) => {
         if (d.success) {
+          console.log(d);
           appContext.UpdateDestinations([]);
           let destinations: DestinationModel[] = [];
           for (let i = 0; i < d.data.length; i++) {
-            let newDest: DestinationModel = {
-              id: d.data[i].id,
-              name: d.data[i].name,
-            };
+            let newDest : DestinationModel = destinationTransformer.transformDestination(d.data[i]);
+            // let newDest: DestinationModel = {
+            //   id: d.data[i].id,
+            //   name: d.data[i].name,
+            // };
             destinations.push(newDest);
           }
           appContext.UpdateDestinations(destinations);

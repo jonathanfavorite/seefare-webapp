@@ -24,11 +24,7 @@ function Boat() {
 }
 function DownArrow() {
   return (
-    <svg
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 512 512"
-    >
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <g>
         <path d="m480.6,111.5h-74.1v-75.9c0-10.7-8.3-19.6-19-20.4-104-7.5-200.4-3.7-263,0.8-10.7,0.8-19,9.8-19,20.5v74.9h-74.1c-10.9,0-20.9,8.8-20.6,22 40.6,166 230.9,361.7 230.9,361.7 9.8,10.8 25.6,4 28.6,0 0,0 177.1-165.8 230.3-359.4 1.6-5.8-0.5-24.3-20-24.2z" />
       </g>
@@ -36,4 +32,38 @@ function DownArrow() {
   );
 }
 
-export { Boat, DownArrow };
+function CheckMark() {
+  return (
+    <svg
+      version="1.1"
+      baseProfile="tiny"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width="42px"
+      height="42px"
+      viewBox="0 0 42 42"
+    >
+      <path
+        d="M39.04,7.604l-2.398-1.93c-1.182-0.95-1.869-0.939-2.881,0.311L16.332,27.494l-8.111-6.739
+	c-1.119-0.94-1.819-0.89-2.739,0.26l-1.851,2.41c-0.939,1.182-0.819,1.853,0.291,2.78l11.56,9.562c1.19,1,1.86,0.897,2.78-0.222
+	l21.079-25.061C40.331,9.294,40.271,8.583,39.04,7.604z"
+      />
+    </svg>
+  );
+}
+function XInsideCircle() {
+  return (
+    <svg
+      width="24px"
+      height="24px"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm4.207 12.793-1.414 1.414L12 13.414l-2.793 2.793-1.414-1.414L10.586 12 7.793 9.207l1.414-1.414L12 10.586l2.793-2.793 1.414 1.414L13.414 12l2.793 2.793z" />
+    </svg>
+  );
+}
+
+export { Boat, DownArrow, CheckMark, XInsideCircle };
