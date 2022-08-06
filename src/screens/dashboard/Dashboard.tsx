@@ -27,12 +27,19 @@ import { PinIcon } from "../../components/icons/NavigationIcons";
 import { CheckMark } from "../../components/icons/Icons";
 import { MapContext } from "../../contexts/MapContext";
 import LatLngModel from "../../models/LatLngModel";
+import ProcessingBox from "../../components/dashboard/search-form/processing/ProcessingBox";
+import PathfindService from "../../services/api/pathfind.service";
+import DrawingManager from "../../managers/DrawingManager";
+import { MarkerModel, MarkerType } from "../../models/MarkerModel";
+import { PathfindModel } from "../../models/PathfindModel";
 
 export default function DashBoardScreen() {
   const destinationManager = new DestinationService();
   const loadingCtx = useContext(LoadingContext);
   const appCtx = useContext(AppContext);
   const mapCtx = useContext(MapContext);
+
+  const drawingManager = new DrawingManager(mapCtx.map, mapCtx.searchToID);
 
   const [originalDraggableHeight, setOriginalDraggableHeight] = useState(0);
   const [currentDraggableView, setCurrentDraggableView] = useState(null);
@@ -42,7 +49,6 @@ export default function DashBoardScreen() {
   const draggableSliderGripRef = createRef<HTMLDivElement>();
 
   const swipeHook = useVerticalSwipe(draggableSliderGripRef);
-
 
   useEffect(() => {
     if (swipeHook.swipedUp) {
@@ -95,19 +101,17 @@ export default function DashBoardScreen() {
     //SetDraggableView(<SearchForm />);
   }, []);
 
-
   function SetDraggableView(text: any) {
     setCurrentDraggableView(text);
   }
 
   useEffect(() => {
-    if(mapCtx.startPathfinding != 0)
-    {
+    if (mapCtx.startPathfinding != 0) {
       console.log("lets go");
-    } 
+      Pathfind();
+    }
   }, [mapCtx.startPathfinding]);
 
-  
   const geocoder = new google.maps.Geocoder();
 
   const handleCheckMarkClick = () => {
@@ -117,7 +121,6 @@ export default function DashBoardScreen() {
     let latAdjustment = currentPos.lat() - 0.000025;
     let finalPosition = { lat: latAdjustment, lng: currentPos.lng() };
 
-
     geocoder.geocode(
       {
         location: finalPosition,
@@ -126,16 +129,14 @@ export default function DashBoardScreen() {
         if (status === google.maps.GeocoderStatus.OK) {
           if (results && results[0]) {
             //mapCtx.updateSearchFromText(results[0].formatted_address);
-            let coords : LatLngModel = {
+            let coords: LatLngModel = {
               lat: finalPosition.lat,
-              lng: finalPosition.lng
-            }
-            if(mapCtx.searchFromText == "")
-            {
-              
+              lng: finalPosition.lng,
+            };
+            if (mapCtx.searchFromText == "") {
               mapCtx.updateSearchFromText(results[0].formatted_address);
             }
-            
+
             mapCtx.updateSearchFromCoords(coords);
           } else {
             window.alert("No results found");
@@ -145,10 +146,76 @@ export default function DashBoardScreen() {
         }
       }
     );
-
-
   };
 
+  function handlePathfindInfo(info: any)
+  {
+    drawingManager.clearPolyLines();
+    let tmpMarkers : MarkerModel[] = [];
+
+    let houseMarker : MarkerModel = {
+      id: 0,
+      position: mapCtx.searchFromCoords,
+      speed: 5,
+      type: MarkerType.House,
+      destinationID: 0,
+      subDestinationID: 0
+    };
+
+    tmpMarkers.push(houseMarker);
+    
+    for(let i = 0; i < info.data.results.length; i++)
+    {
+      let thisMarker = info.data.results[i];
+      let newMarker : MarkerModel = {
+        id: thisMarker.id,
+        position: { lat: thisMarker.lat, lng: thisMarker.lng },
+        speed: thisMarker.speed,
+        type: thisMarker.type,
+        destinationID: thisMarker.destinationID,
+        subDestinationID: thisMarker.subDestinationID
+      };
+      tmpMarkers.push(newMarker);
+    }
+
+   
+
+    let final : PathfindModel = drawingManager.run(tmpMarkers);
+
+    console.log("TMP", tmpMarkers);
+
+  }
+
+
+  async function Pathfind() {
+    const pathfindService = new PathfindService();
+    await pathfindService.Pathfind(mapCtx.searchFromCoords.lat, mapCtx.searchFromCoords.lng, mapCtx.searchToID)
+    .then((response) => {
+    //  console.log("response", response);
+      if(response.success)
+      {
+        //console.log("sucess", response.success);
+        const responseText = response.data.response;
+        const results = response.data.results;
+        if(results)
+        {
+          console.log(response);
+        //  console.log("RESULTCEPTION", response);
+          handlePathfindInfo(response);
+         
+        }
+        else
+        {
+          console.log("no results");
+        }
+        console.log("responseText", responseText);
+      }
+      else
+      {
+        console.log("error pathfinding");
+      }
+    })
+  }
   return (
     <div id="dashboard-screen-wrapper">
       {loadingCtx.loading && <FullScreenLoading />}
@@ -164,25 +231,24 @@ export default function DashBoardScreen() {
               className="pin-toggle-wrap"
               onClick={() => mapCtx.updateCustomPin(!mapCtx.toggleCustomPin)}
             >
-            
               <div className="toggle">
                 {!mapCtx.toggleCustomPin ? (
                   <div className="pin">
                     <PinIcon />
                   </div>
-                ) : (<>
-                  <span>Click here when finished</span>
-                  <div className="checkmark" onClick={handleCheckMarkClick}>
-                    
-                    <CheckMark />
-                  </div>
+                ) : (
+                  <>
+                    <span>Click here when finished</span>
+                    <div className="checkmark" onClick={handleCheckMarkClick}>
+                      <CheckMark />
+                    </div>
                   </>
                 )}
               </div>
             </div>
 
             <div className="pin-drop-wrap">
-            {mapCtx.toggleCustomPin && <div className="hole"></div> }
+              {mapCtx.toggleCustomPin && <div className="hole"></div>}
               {mapCtx.toggleCustomPin && (
                 <div className="pin">
                   <PinIcon />
@@ -196,18 +262,23 @@ export default function DashBoardScreen() {
 
           <div className="hidden-slider-wrap" ref={hiddenSliderRef}></div>
           <div className="draggable-slider-wrap" ref={draggableSliderRef}>
-            <div className="content">
-              <div
-                className="slider-grip-wrap"
-                ref={draggableSliderGripRef}
+          <div
+                className="slider-grip-wrap" ref={draggableSliderGripRef}
                 onTouchStart={swipeHook.onTouchStart}
                 onTouchMove={swipeHook.onTouchMove}
-                onTouchEnd={swipeHook.onTouchEnd}
-              >
+                onTouchEnd={swipeHook.onTouchEnd}>
                 <div className="slider-grip"></div>
 
-               {(!loadingCtx.loading && mapCtx.startPathfinding == 0) && <SearchForm />} 
+                
               </div>
+            <div className="content">
+            
+              {!loadingCtx.loading && mapCtx.startPathfinding == 0 && (
+                  <SearchForm />
+                )}
+                {!loadingCtx.loading && mapCtx.startPathfinding > 0 && (
+                  <ProcessingBox />
+                )}
             </div>
           </div>
         </div>

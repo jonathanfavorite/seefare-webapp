@@ -20,7 +20,7 @@ function Map(props: MapProps) {
 
   function clearMarkers() {
     for (let i = 0; i < markers.length; i++) {
-      markers[i].marker.setMap(null);
+      markers[i].marker?.setMap(null);
     }
     setMarkers((old) => []);
   }
@@ -40,12 +40,14 @@ function Map(props: MapProps) {
             position: { lat: lat, lng: lng },
             map: mapContext.map,
           });
-          let newMarker: MarkerModel = {
-            lat: lat,
-            lng: lng,
+          let newMarker: MarkerModel = { 
+            position: { lat: lat, lng: lng },
+            speed: 0,
             marker: newMarkerObject,
             type: MarkerType.Destination,
             id: destinations[i].id,
+            destinationID: 0,
+            subDestinationID: 0
           };
           addMarker(newMarker);
         }
