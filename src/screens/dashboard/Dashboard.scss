@@ -100,16 +100,23 @@
             flex:1;
             padding-right:10px;
             font-size:13px;
+            color:#fff;
             font-weight: bold;
-            text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
-            1px 1px 0 white;
+            text-shadow: -1px -1px 0 #005fdd, 1px -1px 0 #005fdd, -1px 1px 0 #005fdd,
+            1px 1px 0 #005fdd;
           }
           .checkmark, .pin {
-            width:40px;
-            height:50px;
+            width:60px;
+            height:60px;
+            border-radius: 100px;
+            justify-content: center;
+            align-items: center;
             border: 2px dashed #fff;
             display:flex;
             background: rgba($color: white, $alpha: 0.8);
+            svg {
+              width:80%;
+            }
           }
         }
       }
@@ -120,7 +127,7 @@
         position: absolute;
         bottom: 0;
         left: 0;
-        z-index: 1000;
+
         width: 100%;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;

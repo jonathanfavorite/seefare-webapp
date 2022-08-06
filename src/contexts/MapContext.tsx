@@ -9,6 +9,7 @@ interface MapContextProps {
   searchToID: number;
   selectedTagID: number;
   toggleCustomPin: boolean;
+  startPathfinding: number;
   updateSelectedTagID: (selectedTagID: number) => void;
   updateSearchFromText: (searchFrom: string) => void;
   updateSearchToText: (searchTo: string) => void;
@@ -17,6 +18,7 @@ interface MapContextProps {
   updateCustomPin: (toggleCustomPin: boolean) => void;
   updateSearchFromCoords: (searchFromCoords: LatLngModel) => void;
   updateSearchToID: (searchToID: number) => void;
+  updateStartPathfinding: () => void;
   searchButtonClicked: number;
 }
 
@@ -33,6 +35,8 @@ function MapContextProvider(props: any) {
   const [searchButtonClicked, setSearchButtonClicked] = useState<number>(0);
   const [selectedTagID, setSelectedTagID] = useState<number>(0);
   const [toggleCustomPin, setToggleCustomPin] = useState(false);
+
+  const [startPathfinding, setStartPathfinding] = useState(0);
 
   const updateMap = (map: any) => {
     setMap(map);
@@ -58,6 +62,9 @@ function MapContextProvider(props: any) {
   const updateSearchToID = (searchToID: number) => {
     setSearchToID(old => searchToID);
   }
+  const updateStartPathfinding = () => {
+    setStartPathfinding(old => old + 1);
+  }
 
   let contextList: MapContextProps = {
     map,
@@ -75,7 +82,9 @@ function MapContextProvider(props: any) {
     updateSearchToID,
     updateCustomPin,
     updateSearchButtonClicked,
-    searchButtonClicked
+    updateStartPathfinding,
+    searchButtonClicked,
+    startPathfinding
   };
 
   return (

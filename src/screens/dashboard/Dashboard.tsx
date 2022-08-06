@@ -35,6 +35,7 @@ export default function DashBoardScreen() {
   const mapCtx = useContext(MapContext);
 
   const [originalDraggableHeight, setOriginalDraggableHeight] = useState(0);
+  const [currentDraggableView, setCurrentDraggableView] = useState(null);
   const mapContentRef = useRef<HTMLDivElement>(null);
   const hiddenSliderRef = createRef<HTMLDivElement>();
   const draggableSliderRef = createRef<HTMLDivElement>();
@@ -90,7 +91,21 @@ export default function DashBoardScreen() {
       };
       appCtx.UpdateTags([exampleTag]);
     }
+
+    //SetDraggableView(<SearchForm />);
   }, []);
+
+
+  function SetDraggableView(text: any) {
+    setCurrentDraggableView(text);
+  }
+
+  useEffect(() => {
+    if(mapCtx.startPathfinding != 0)
+    {
+      console.log("lets go");
+    } 
+  }, [mapCtx.startPathfinding]);
 
   
   const geocoder = new google.maps.Geocoder();
@@ -115,6 +130,12 @@ export default function DashBoardScreen() {
               lat: finalPosition.lat,
               lng: finalPosition.lng
             }
+            if(mapCtx.searchFromText == "")
+            {
+              
+              mapCtx.updateSearchFromText(results[0].formatted_address);
+            }
+            
             mapCtx.updateSearchFromCoords(coords);
           } else {
             window.alert("No results found");
@@ -125,10 +146,7 @@ export default function DashBoardScreen() {
       }
     );
 
-    let m = new google.maps.Marker({
-      position: { lat: latAdjustment, lng: currentPos.lng() },
-      map: mapCtx.map,
-    });
+
   };
 
   return (
@@ -188,7 +206,7 @@ export default function DashBoardScreen() {
               >
                 <div className="slider-grip"></div>
 
-                {!loadingCtx.loading && <SearchForm />}
+               {(!loadingCtx.loading && mapCtx.startPathfinding == 0) && <SearchForm />} 
               </div>
             </div>
           </div>

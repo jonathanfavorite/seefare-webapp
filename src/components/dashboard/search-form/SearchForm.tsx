@@ -79,6 +79,9 @@ function SearchForm() {
       console.log("All good! Here are the details");
       console.log("From Coords", mapCtx.searchFromCoords);
       console.log("To ID", mapCtx.searchToID);
+
+      mapCtx.updateStartPathfinding();
+
     }
   };
 
