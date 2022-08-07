@@ -3,13 +3,13 @@ import { MarkerModel } from "./MarkerModel";
 interface PathfindModel {
     nodes: MarkerModel[];
     times: PathFindTimes;
+    miles: number;
+    bridges: number;
 }
 interface PathFindTimes {
     hours: number;
     minutes: number;
     seconds: number;
-    hoursText: string;
-    minutesText: string;
-    secondsText: string;
+    timeText: string;
 }
 export { type PathfindModel, type PathFindTimes}

@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import LatLngModel from "../models/LatLngModel";
+import { PathfindModel } from "../models/PathfindModel";
 
 interface MapContextProps {
   map: any;
@@ -10,6 +11,8 @@ interface MapContextProps {
   selectedTagID: number;
   toggleCustomPin: boolean;
   startPathfinding: number;
+  pathfindResults: PathfindModel | null;
+  updatePathfindResults: (pathfindResults: PathfindModel | null) => void;
   updateSelectedTagID: (selectedTagID: number) => void;
   updateSearchFromText: (searchFrom: string) => void;
   updateSearchToText: (searchTo: string) => void;
@@ -20,6 +23,7 @@ interface MapContextProps {
   updateSearchToID: (searchToID: number) => void;
   updateStartPathfinding: () => void;
   searchButtonClicked: number;
+  resetSearch: () => void;
 }
 
 const MapContext = createContext<MapContextProps>(null as any);
@@ -35,6 +39,8 @@ function MapContextProvider(props: any) {
   const [searchButtonClicked, setSearchButtonClicked] = useState<number>(0);
   const [selectedTagID, setSelectedTagID] = useState<number>(0);
   const [toggleCustomPin, setToggleCustomPin] = useState(false);
+
+  const [pathfindResults, setPathfindResults] = useState<PathfindModel | null>(null);
 
   const [startPathfinding, setStartPathfinding] = useState(0);
 
@@ -65,6 +71,18 @@ function MapContextProvider(props: any) {
   const updateStartPathfinding = () => {
     setStartPathfinding(old => old + 1);
   }
+  const updatePathfindResults = (pathfindResults: PathfindModel | null) => {
+    setPathfindResults(old => pathfindResults);
+  }
+  const resetSearch = () => {
+    setSearchFromText("");
+    setSearchToText("");
+    setSearchFromCoords({ lat: 0, lng: 0 });
+    setSearchToID(0);
+    setToggleCustomPin(false);
+    setPathfindResults(null);
+    setStartPathfinding(0);
+  }
 
   let contextList: MapContextProps = {
     map,
@@ -84,7 +102,10 @@ function MapContextProvider(props: any) {
     updateSearchButtonClicked,
     updateStartPathfinding,
     searchButtonClicked,
-    startPathfinding
+    startPathfinding,
+    pathfindResults,
+    updatePathfindResults,
+    resetSearch
   };
 
   return (

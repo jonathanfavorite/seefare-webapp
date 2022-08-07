@@ -31,7 +31,8 @@ import ProcessingBox from "../../components/dashboard/search-form/processing/Pro
 import PathfindService from "../../services/api/pathfind.service";
 import DrawingManager from "../../managers/DrawingManager";
 import { MarkerModel, MarkerType } from "../../models/MarkerModel";
-import { PathfindModel } from "../../models/PathfindModel";
+import { PathfindModel, PathFindTimes } from "../../models/PathfindModel";
+import PathfindingResults from "../../components/dashboard/pathfinding/pathfinding-results/PathfindingResults";
 
 export default function DashBoardScreen() {
   const destinationManager = new DestinationService();
@@ -150,6 +151,7 @@ export default function DashBoardScreen() {
 
   function handlePathfindInfo(info: any)
   {
+    console.log(info);
     drawingManager.clearPolyLines();
     let tmpMarkers : MarkerModel[] = [];
 
@@ -163,14 +165,14 @@ export default function DashBoardScreen() {
     };
 
     tmpMarkers.push(houseMarker);
-    
+
     for(let i = 0; i < info.data.results.length; i++)
     {
       let thisMarker = info.data.results[i];
       let newMarker : MarkerModel = {
         id: thisMarker.id,
         position: { lat: thisMarker.lat, lng: thisMarker.lng },
-        speed: thisMarker.speed,
+        speed: thisMarker.speed ? thisMarker.speed : 5,
         type: thisMarker.type,
         destinationID: thisMarker.destinationID,
         subDestinationID: thisMarker.subDestinationID
@@ -178,11 +180,35 @@ export default function DashBoardScreen() {
       tmpMarkers.push(newMarker);
     }
 
+    let details = info.data.details;
+    let Hours = details.hours.toFixed(2);
+    let Minutes = details.minutes.toFixed(0);
+    let Seconds = details.seconds.toFixed(0);
+    // format the time
+    let finalTime = "";
+    let newHour = Math.floor(Hours);
+    let newMinutes = Math.round(60 * (Hours - Math.floor(Hours)));
+    if(newHour > 0)
+    {
+        finalTime += newHour + (newHour == 1 ? " hour " : " hours ");
+    }
+    if(newMinutes >= 1)
+    {
+        finalTime += newMinutes + (newMinutes == 1 ? " minute " : " minutes ");
+    }
+
+    let pathfindTime : PathFindTimes = {
+      hours: newHour,
+      minutes: newMinutes,
+      seconds: Seconds,
+      timeText : finalTime
+    }
    
 
     let final : PathfindModel = drawingManager.run(tmpMarkers);
-
-    console.log("TMP", tmpMarkers);
+    final.times = pathfindTime;
+    final.miles = details.totalDistance;
+    mapCtx.updatePathfindResults(final);
 
   }
 
@@ -199,7 +225,6 @@ export default function DashBoardScreen() {
         const results = response.data.results;
         if(results)
         {
-          console.log(response);
         //  console.log("RESULTCEPTION", response);
           handlePathfindInfo(response);
          
@@ -271,14 +296,19 @@ export default function DashBoardScreen() {
 
                 
               </div>
-            <div className="content">
+            <div className="content"> 
             
-              {!loadingCtx.loading && mapCtx.startPathfinding == 0 && (
+              {!loadingCtx.loading && mapCtx.startPathfinding == 0 &&  mapCtx.startPathfinding == 0 && (
                   <SearchForm />
                 )}
-                {!loadingCtx.loading && mapCtx.startPathfinding > 0 && (
+                {mapCtx.startPathfinding != 0 && !mapCtx.pathfindResults && (
                   <ProcessingBox />
                 )}
+                {!loadingCtx.loading && mapCtx.pathfindResults && (
+                      <PathfindingResults />  
+                )}
+              
+                
             </div>
           </div>
         </div>

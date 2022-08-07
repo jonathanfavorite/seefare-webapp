@@ -14,7 +14,19 @@ export default class DrawingManager {
     this.markers = [];
     this.destinationID = destinationID;
   }
-  clearPolyLines() {}
+  clearPolyLines() {
+    for (let i = 0; i < this.polylines.length; i++) {
+      this.polylines[i].setMap(null);
+    }
+    console.log("hey");
+    this.polylines = [];
+    console.log("polylines", this.polylines);
+
+    for (let i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+    this.markers = [];
+  }
 
   run(markers: MarkerModel[]): PathfindModel {
     this.createMarker(markers[0]);
@@ -44,31 +56,17 @@ export default class DrawingManager {
 
     this.map.fitBounds(bounds);
 
-    /*
-bounds.extend({
-        lat: positions[i].details!.lat,
-        lng: positions[i].details!.lng,
-      });
-    }
-    mapContext.map.fitBounds(bounds);
-    //mapContext.map.setZoom(17);
-    if (mapContext.map.getZoom() > 17) {
-      mapContext.map.setZoom(17);
-    }
-
-    */
-
     let pathfindTimes: PathFindTimes = {
       hours: 0,
       minutes: 0,
       seconds: 0,
-      hoursText: "",
-      minutesText: "",
-      secondsText: "",
+      timeText: "",
     };
     let pathfindModel: PathfindModel = {
       nodes: [],
       times: pathfindTimes,
+      miles: 0,
+      bridges: 0,
     };
     return pathfindModel;
   }
@@ -150,7 +148,8 @@ bounds.extend({
     return false;
   }
   DrawSpeedLimits(markers: MarkerModel[]) {
-    for (let i = markers.length - 1; i > 0; i--) {
+    /*
+ for (let i = markers.length - 1; i > 0; i--) {
       let thisMarker = markers[i];
       let nextMarker = markers[i - 1];
       let didSpeedLimitChange = this.didSpeedLimitChange(
@@ -160,6 +159,19 @@ bounds.extend({
       if (didSpeedLimitChange) {
         this.drawSpeedLimitChange(thisMarker);
       }
+    }
+   */
+
+    for (let i = 1; i < markers.length; i++) {
+        let thisMarker = markers[i - 1];
+        let nextMarker = markers[i];
+        let didSpeedLimitChange = this.didSpeedLimitChange(
+          nextMarker.speed,
+          thisMarker.speed
+        );
+        if (didSpeedLimitChange) {
+          this.drawSpeedLimitChange(thisMarker);
+        }
     }
   }
 
