@@ -46,15 +46,25 @@ export default class DrawingManager {
       ) {
         this.createMarker(markers[i]);
       }
-      bounds.extend({
-        lat: markers[i].position.lat,
-        lng: markers[i].position.lng,
-      });
+     
     }
+
 
     this.DrawSpeedLimits(markers);
 
-    this.map.fitBounds(bounds);
+    setTimeout(() => {
+        for(let i = 0; i < markers.length; i++) {
+            bounds.extend({
+                lat: markers[i].position.lat,
+                lng: markers[i].position.lng,
+              });
+        }
+        this.map.fitBounds(bounds);
+    },1000); 
+
+  
+
+  
 
     let pathfindTimes: PathFindTimes = {
       hours: 0,

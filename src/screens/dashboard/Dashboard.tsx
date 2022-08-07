@@ -122,6 +122,15 @@ export default function DashBoardScreen() {
     let latAdjustment = currentPos.lat() - 0.000025;
     let finalPosition = { lat: latAdjustment, lng: currentPos.lng() };
 
+    let pin = new google.maps.Marker({
+      position: finalPosition,
+      map: mapCtx.map,
+      icon: {
+        url: "../../images/markers/house.png",
+        scaledSize: new google.maps.Size(40, 40),
+      }
+    })
+
     geocoder.geocode(
       {
         location: finalPosition,
