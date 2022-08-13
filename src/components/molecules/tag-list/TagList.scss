@@ -1,0 +1,11 @@
+.tags-wrap {
+    .tags-list {
+      background: #005eda;
+      overflow-x: auto;
+      white-space: nowrap;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      width: 100vw;
+    }
+  }

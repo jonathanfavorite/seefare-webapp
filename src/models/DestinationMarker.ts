@@ -1,2 +1,0 @@
-import { DestinationModel } from "./DestinationModel";
-

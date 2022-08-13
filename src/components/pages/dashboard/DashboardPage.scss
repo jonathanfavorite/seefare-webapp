@@ -1,0 +1,19 @@
+@use '../../../styles/master' as master;
+
+#dashboard-screen-wrapper {
+  display: flex;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  .dashboard-header-wrap {
+
+  }
+  .dashboard-content-wrap {
+    flex:1;
+    position: relative;
+  }
+  .dashboard-footer-navigation-wrap {
+
+  }
+}

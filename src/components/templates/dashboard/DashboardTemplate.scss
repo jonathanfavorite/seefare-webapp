@@ -1,0 +1,15 @@
+
+.dashboard-template-wrap {
+    display: flex;
+    position:relative;
+    flex:1;
+    height:100%;
+    flex-direction: column;
+    .tags-list-wrap {
+    }
+    .maps-wrap-container {
+        flex:1;
+        display:flex;
+        position: relative;
+    }
+}

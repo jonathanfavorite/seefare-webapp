@@ -1,0 +1,154 @@
+@use '../../../styles/master' as master;
+
+.maps-wrap {
+  flex: 1;
+  position: relative;
+  flex-direction: column;
+  display: flex;
+
+  .maps-content {
+    flex: 1;
+    position: relative;
+    .map-container {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+  
+  .pin-drop-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .hole {
+      position: absolute;
+      border-radius: 100px;
+      width: 200px;
+      height: 200px;
+      box-shadow: 0 0 0 9999px rgba($color: master.$primary-blue, $alpha: 0.5);
+      z-index: 10;
+    }
+
+    .pin {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 12px;
+      animation: start-wiggle 0.5s ease-in-out;
+      animation-iteration-count: 2;
+      text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
+        1px 1px 0 white;
+      flex-direction: column;
+      svg {
+        width: 40px;
+        fill: master.$primary-green;
+        stroke: #fff;
+      }
+    }
+    @keyframes start-wiggle {
+      0% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(5deg);
+      }
+      75% {
+        transform: rotate(-5deg);
+      }
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+.pin-toggle-wrap {
+  position: absolute;
+  right: 20px;
+  z-index: 10;
+  pointer-events: none;
+
+  bottom: 50px;
+
+  .toggle {
+    display: flex;
+    fill: master.$primary-green;
+    justify-content: center;
+    pointer-events: none;
+    align-items: center;
+    span {
+      flex: 1;
+      pointer-events: none;
+      padding-right: 10px;
+      font-size: 13px;
+      color: #fff;
+      font-weight: bold;
+      text-shadow: -1px -1px 0 #005fdd, 1px -1px 0 #005fdd, -1px 1px 0 #005fdd,
+        1px 1px 0 #005fdd;
+    }
+    .checkmark,
+    .pin {
+      width: 60px;
+      height: 60px;
+      pointer-events: all;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      border: 2px dashed #fff;
+      display: flex;
+      background: rgba($color: white, $alpha: 0.8);
+      svg {
+        width: 80%;
+      }
+    }
+  }
+}
+
+.draggable-slider-wrap {
+  background-color: #007bfb;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display: flex;
+  color: #fff;
+  flex-direction: column;
+
+  overflow: hidden;
+  transition: all 0.1s ease-in-out;
+
+  .slider-grip-wrap {
+    position: relative;
+    padding: 10px;
+    padding-top: 20px;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+
+    .slider-grip {
+      margin: 0 auto;
+      width: 50px;
+      height: 5px;
+      background: #0060c3;
+      margin-bottom: 20px;
+    }
+  }
+  .content {
+    display: flex;
+    justify-content: center;
+  }
+}
+}

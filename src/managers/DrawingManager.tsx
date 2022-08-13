@@ -15,12 +15,13 @@ export default class DrawingManager {
     this.destinationID = destinationID;
   }
   clearPolyLines() {
+    console.log("POLYLINES", this.polylines);
+    console.log("MARKERS", this.markers);
     for (let i = 0; i < this.polylines.length; i++) {
+      console.log("clearing", this.polylines[i]); 
       this.polylines[i].setMap(null);
     }
-    console.log("hey");
     this.polylines = [];
-    console.log("polylines", this.polylines);
 
     for (let i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(null);
@@ -29,6 +30,7 @@ export default class DrawingManager {
   }
 
   run(markers: MarkerModel[]): PathfindModel {
+    this.clearPolyLines();
     this.createMarker(markers[0]);
     let bounds = new google.maps.LatLngBounds();
     for (let i = 1; i < markers.length; i++) {
@@ -124,8 +126,10 @@ export default class DrawingManager {
       icon: finalIcon,
       zIndex: 10,
     });
+    console.log('PUSHING MARKER', m);
     console.log(finalIcon);
     this.markers.push(m);
+    console.log("~~MARKERS", this.markers);
   }
   drawPolyLine(from: LatLngModel, to: LatLngModel, speed: number) {
     const newLine = new google.maps.Polyline({
@@ -158,19 +162,6 @@ export default class DrawingManager {
     return false;
   }
   DrawSpeedLimits(markers: MarkerModel[]) {
-    /*
- for (let i = markers.length - 1; i > 0; i--) {
-      let thisMarker = markers[i];
-      let nextMarker = markers[i - 1];
-      let didSpeedLimitChange = this.didSpeedLimitChange(
-        nextMarker.speed,
-        thisMarker.speed
-      );
-      if (didSpeedLimitChange) {
-        this.drawSpeedLimitChange(thisMarker);
-      }
-    }
-   */
 
     for (let i = 1; i < markers.length; i++) {
         let thisMarker = markers[i - 1];

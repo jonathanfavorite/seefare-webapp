@@ -1,0 +1,99 @@
+@use '../../../styles/master'as master;
+$bgURL: '../../../../public/images/welcome-splash.jpg';
+
+#welcome-splash-container {
+    display: flex;
+    flex: 0 0 100%;
+    #welcome-splash-content {
+        display: flex;
+        color: #fff;
+        flex: 0 0 100%;
+        flex-direction: column;
+        background-image: url($bgURL);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        justify-content: center;
+        align-items: center;
+
+        #top-content {
+            flex-grow: 1;
+        }
+        #logo_wrap {
+            flex:1;
+            font-size: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+        #destination-wrap {
+       
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            #title {
+                font-weight: bold;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            #dropdown {
+                display: flex;
+                #text {
+                    flex-grow: 1;
+                    font-weight: bold;
+                    font-size: 30px;
+                }
+                #arrow {
+                    color: master.$primary-green;
+                    margin-left: 10px;
+                }
+            }
+        }
+        #didyouknow-wrap {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            #content {
+                max-width:70%;
+                font-size:15px;
+                #title {
+                    margin-bottom:10px;
+                }
+                #description {
+
+                }
+            }
+        }
+        #go_wrap {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .waiting-go {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                .text {
+                    font-size: 20px;
+                    font-weight: bold;
+                    margin-top: 20px;
+                }
+            }
+        }
+        #undergo_wrap {}
+        #bottom-content {
+            padding: 20px;
+            #disclaimer {
+                font-size: 13px;
+                text-align: center;
+       
+            }
+        }
+    }
+}
+
+
+
