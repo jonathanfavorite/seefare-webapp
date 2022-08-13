@@ -42,33 +42,27 @@ function MapWrapper() {
     const swipeHook = useVerticalSwipe(draggableSliderGripRef);
 
     const handleCheckMarkClick = () => {
-     
-      //console.log("~~ HERE", tempHouseMarker);
-        for(let i = 0; i < tempHouseMarker.length; i++) {
-            tempHouseMarker[i].setMap(null);
-            // remove from arra
-            tempHouseMarker.splice(i, 1);
-        }
+        
+        mapCtx.clearMap();
 
-       // mapCtx.resetSearch();
-      
         let currentPos = mapCtx.map.getCenter();
         console.log(currentPos.lat(), currentPos.lng());
 
         let latAdjustment = currentPos.lat() - 0.000025;
         let finalPosition = { lat: latAdjustment, lng: currentPos.lng() };
 
-        let pin = new google.maps.Marker({
-            position: finalPosition,
-            map: mapCtx.map,
-            icon: {
-                url: "../../images/markers/house.png",
-                scaledSize: new google.maps.Size(40, 40),
-            },
-        });
 
-        tempHouseMarker.push(pin);
-        console.log(tempHouseMarker);
+        mapCtx.addMarker(
+            new google.maps.Marker({
+                position: finalPosition,
+                map: mapCtx.map,
+                icon: {
+                    url: "../../images/markers/house.png",
+                    scaledSize: new google.maps.Size(40, 40),
+                },
+            })
+        );
+
 
         const geocoder = new google.maps.Geocoder();
 
@@ -237,9 +231,14 @@ function MapWrapper() {
                     } else {
                         console.log("no results");
                     }
-                    console.log("responseText", responseText);
+                    console.log("nopathfind - responseText", results);
+                    console.log(mapCtx.searchFromCoords.lat);
+                    console.log(mapCtx.searchFromCoords.lng);
+                    console.log(mapCtx.searchToID);
                 } else {
-                    console.log("error pathfinding");
+                    console.log(mapCtx.searchFromCoords.lat);
+                    console.log(mapCtx.searchFromCoords.lng);
+                    console.log(mapCtx.searchToID);
                 }
             });
     }

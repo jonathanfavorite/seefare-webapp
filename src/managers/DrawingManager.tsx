@@ -1,6 +1,7 @@
 import LatLngModel from "../models/LatLngModel";
 import { MarkerModel, MarkerType } from "../models/MarkerModel";
 import { PathfindModel, PathFindTimes } from "../models/PathfindModel";
+import { MapContext } from "../contexts/MapContext";
 
 export default class DrawingManager {
   map: google.maps.Map;
@@ -126,10 +127,8 @@ export default class DrawingManager {
       icon: finalIcon,
       zIndex: 10,
     });
-    console.log('PUSHING MARKER', m);
-    console.log(finalIcon);
-    this.markers.push(m);
-    console.log("~~MARKERS", this.markers);
+
+
   }
   drawPolyLine(from: LatLngModel, to: LatLngModel, speed: number) {
     const newLine = new google.maps.Polyline({

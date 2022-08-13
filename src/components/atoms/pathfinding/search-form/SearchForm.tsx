@@ -70,7 +70,9 @@ function SearchForm() {
     };
     const handleSearchToChange = () => {
         if (toRef.current) {
+            console.log("changed to", toRef.current.value);
             mapCtx.updateSearchToText(toRef.current.value);
+            mapCtx.updateSearchToID(parseInt(toRef.current.value));
         }
     };
 
